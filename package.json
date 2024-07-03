@@ -1,26 +1,75 @@
 {
-  "name": "star-wars",
+  "name": "sw-wiki",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "build-storybook": "storybook build",
+    "coverage": "vitest run --coverage",
+    "dev": "yarn prepare && next dev",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore .",
+    "lint": "next lint",
+    "nuke": "rm -rf node_modules yarn.lock && yarn cache clean --all && yarn && yarn upgrade",
+    "precommit": "lint-staged",
+    "prepare": "husky",
+    "prepush": "yarn build",
     "start": "next start",
-    "lint": "next lint"
+    "test": "vitest --reporter verbose --environment jsdom",
+    "test:staged": "vitest related --run"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --ext .ts,.tsx,.js --fix",
+      "yarn test:staged"
+    ]
   },
   "dependencies": {
+    "@radix-ui/react-icons": "^1.3.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@tanstack/react-query": "^5.49.2",
+    "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.400.0",
+    "next": "14.2.4",
+    "next-intl": "^3.15.3",
+    "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.4"
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@commitlint/cli": "^19.1.0",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@next/eslint-plugin-next": "^14.1.3",
+    "@redux-devtools/extension": "^3.3.0",
+    "@tanstack/eslint-plugin-query": "^5.27.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
     "eslint": "^8",
-    "eslint-config-next": "14.2.4"
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-next": "14.0.4",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "openapi-zod-client": "^1.18.1",
+    "postcss": "^8",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }

@@ -1,0 +1,7 @@
+node_modules/*
+.next
+.prettierrc
+.eslintrc
+env.d.ts
+commitlint.config.js
+eslint-custom-rules/*
