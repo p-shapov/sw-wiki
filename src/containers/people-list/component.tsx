@@ -17,10 +17,12 @@ const PeopleList: React.FC<PeopleListProps> = ({ searchQuery }) => {
       useListQuery={useListPeopleQuery}
       searchQuery={searchQuery}
       render={(person) => (
-        <TypographyParagraph>
+        <TypographyParagraph className="w-max">
           {person.name}
           <Link href={appRoutes.person(person.id)}>
-            <TypographySmall>Read more</TypographySmall>
+            <TypographySmall className="text-muted-foreground">
+              Read more
+            </TypographySmall>
           </Link>
         </TypographyParagraph>
       )}

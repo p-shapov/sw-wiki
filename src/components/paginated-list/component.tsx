@@ -36,7 +36,7 @@ const PaginatedList = clientOnly(
       },
     });
     React.useEffect(() => {
-      setPage("1");
+      if (page !== "1") setPage("1");
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
     if (!list.data) {
@@ -67,11 +67,9 @@ const PaginatedList = clientOnly(
         </ul>
         <Pagination className="w-max mx-[0]">
           <PaginationContent>
-            {list.data.previous && (
-              <PaginationItem>
-                <PaginationPrevious onClick={handlePrevious} />
-              </PaginationItem>
-            )}
+            <PaginationItem>
+              <PaginationPrevious onClick={handlePrevious} />
+            </PaginationItem>
             {Array.from({ length: list.data.pages }).map((_, index) => (
               <PaginationItem key={index} onClick={mkHandlePage(index + 1)}>
                 <PaginationLink isActive={index + 1 === Number(page)}>
@@ -79,11 +77,9 @@ const PaginatedList = clientOnly(
                 </PaginationLink>
               </PaginationItem>
             ))}
-            {list.data.next && (
-              <PaginationItem>
-                <PaginationNext onClick={handleNext} />
-              </PaginationItem>
-            )}
+            <PaginationItem>
+              <PaginationNext onClick={handleNext} />
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>

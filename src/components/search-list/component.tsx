@@ -172,6 +172,10 @@ const SearchList = clientOnly(({ onSearch, select, useListQuery }) => {
     [] as string[],
   );
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  React.useEffect(() => {
+    form.setValue("query", query);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
   const handleSearch = ({ query }: { query: string }) => {
     setRecentQueries((prev) => {
       const next = [query, ...prev.filter((item) => item !== query && !!item)];
