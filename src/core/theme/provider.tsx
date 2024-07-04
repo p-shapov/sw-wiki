@@ -1,3 +1,5 @@
+"use client";
+
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 import React from "react";

@@ -10,7 +10,7 @@ const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     mount: state.mount,
   }));
   React.useEffect(() => {
-    if (isMounted) mount();
+    if (!isMounted) mount();
   }, [isMounted, mount]);
   return children;
 };

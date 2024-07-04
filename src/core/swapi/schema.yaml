@@ -1,0 +1,1022 @@
+openapi: 3.0.0
+info:
+  title: SWAPI (TypeSpec)
+  version: v1
+  description: >-
+    SWAPI: The Star Wars API (generated with TypeSpec from
+    [swapi-typespec](https://github.com/connorjs/swapi-typespec#readme)).
+externalDocs:
+  url: https://swapi.dev/
+tags: []
+paths:
+  /:
+    get:
+      operationId: GetRoot
+      parameters: []
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Root"
+  /films:
+    get:
+      operationId: ListFilms
+      description: Get all the films resources.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive partial match on the `name` field.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The total number of resources available.
+                  next:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the next page of resources.
+                  previous:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the previous page of resources.
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Film"
+  /films/{filmId}:
+    get:
+      operationId: GetFilm
+      description: Get a specific film resource.
+      parameters:
+        - name: filmId
+          in: path
+          required: true
+          description: Numeric ID of the film to get.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Film"
+  /people:
+    get:
+      operationId: ListPeople
+      description: Get all the people resources.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive partial match on the `name` field.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The total number of resources available.
+                  next:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the next page of resources.
+                  previous:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the previous page of resources.
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Person"
+                required:
+                  - count
+                  - next
+                  - previous
+                  - results
+  /people/{personId}:
+    get:
+      operationId: GetPerson
+      description: Get a specific people resource.
+      parameters:
+        - name: personId
+          in: path
+          required: true
+          description: Numeric ID of the person to get.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+  /planets:
+    get:
+      operationId: ListPlanets
+      description: Get all the planet resources.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive partial match on the `name` field.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The total number of resources available.
+                  next:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the next page of resources.
+                  previous:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the previous page of resources.
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Planet"
+                required:
+                  - count
+                  - next
+                  - previous
+                  - results
+  /planets/{planetId}:
+    get:
+      operationId: GetPlanet
+      description: Get a specific planet resource.
+      parameters:
+        - name: planetId
+          in: path
+          required: true
+          description: Numeric ID of the planet to get.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Planet"
+  /species:
+    get:
+      operationId: ListSpecies
+      description: Get all the species resources.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive partial match on the `name` field.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The total number of resources available.
+                  next:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the next page of resources.
+                  previous:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the previous page of resources.
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/species.Species"
+                required:
+                  - count
+                  - next
+                  - previous
+                  - results
+  /species/{speciesId}:
+    get:
+      operationId: GetSpecies
+      description: Get a specific species resource.
+      parameters:
+        - name: speciesId
+          in: path
+          required: true
+          description: Numeric ID of the species to get.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/species.Species"
+  /starships:
+    get:
+      operationId: ListStarships
+      description: Get all the starship resources.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive partial match on the `name` and `model` fields.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The total number of resources available.
+                  next:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the next page of resources.
+                  previous:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the previous page of resources.
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Starship"
+                required:
+                  - count
+                  - next
+                  - previous
+                  - results
+  /starships/{starshipId}:
+    get:
+      operationId: GetStarship
+      description: Get a specific starship resource.
+      parameters:
+        - name: starshipId
+          in: path
+          required: true
+          description: Numeric ID of the starship to get.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Starship"
+  /vehicles:
+    get:
+      operationId: ListVehicles
+      description: Get all the vehicle resources.
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: Case-insensitive partial match on the `name` and `model` fields.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int32
+                    description: The total number of resources available.
+                  next:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the next page of resources.
+                  previous:
+                    type:
+                      - 'null'
+                      - string
+                    format: uri
+                    description: The URL for the previous page of resources.
+                  results:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Vehicle"
+                required:
+                  - count
+                  - next
+                  - previous
+                  - results
+  /vehicles/{vehicleId}:
+    get:
+      operationId: GetVehicle
+      description: Get a specific vehicle resource.
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          description: Numeric ID of the vehicle to get.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+components:
+  schemas:
+    Film:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of this film
+        episode_id:
+          type: integer
+          format: int32
+          description: The episode number of this film.
+        opening_crawl:
+          type: string
+          description: The opening paragraphs at the beginning of this film.
+        director:
+          type: string
+          description: The name of the director of this film.
+        producer:
+          type: string
+          description: The name(s) of the producer(s) of this film. Comma separated.
+        release_date:
+          type: string
+          format: date
+          description: >-
+            The ISO 8601 date format of film release at original creator
+            country.
+        species:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of species resource URLs that are in this film.
+        starships:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of starship resource URLs that are in this film.
+        vehicles:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of vehicle resource URLs that are in this film.
+        characters:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of people resource URLs that are in this film.
+        planets:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of planet resource URLs that are in this film.
+        url:
+          type: string
+          format: uri
+          description: The hypermedia URL of this resource.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was created.
+        edited:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was edited.
+      description: A Film resource is a single film.
+      required:
+        - title
+        - episode_id
+        - opening_crawl
+        - director
+        - producer
+        - release_date
+        - species
+        - starships
+        - vehicles
+        - characters
+        - planets
+        - url
+        - created
+        - edited
+    Person:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of this person.
+        birth_year:
+          type: string
+          description: >-
+            The birth year of the person, using the in-universe standard of BBY
+            or ABY - Before the Battle of Yavin or After the Battle of Yavin.
+            The Battle of Yavin is a battle that occurs at the end of Star Wars
+            episode IV: A New Hope.
+        eye_color:
+          type: string
+          description: >-
+            The eye color of this person. Will be `"unknown"` if not known or
+            `"n/a"` if the person does not have an eye.
+        gender:
+          type: string
+          description: >-
+            The gender of this person. Either `"Male"`, `"Female"` or
+            `"unknown"`, `"n/a"` if the person does not have a gender.
+        hair_color:
+          type: string
+          description: >-
+            The hair color of this person. Will be `"unknown"` if not known or
+            `"n/a"` if the person does not have hair.
+        height:
+          type: string
+          description: The height of the person in centimeters.
+        mass:
+          type: string
+          description: The mass of the person in kilograms.
+        skin_color:
+          type: string
+          description: The skin color of this person.
+        homeworld:
+          type: string
+          format: uri
+          description: >-
+            The URL of a planet resource, a planet that this person was born on
+            or inhabits.
+        films:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of film resource URLs that this person has been in.
+        species:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of species resource URLs that this person belongs to.
+        starships:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of starship resource URLs that this person has piloted.
+        vehicles:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of vehicle resource URLs that this person has piloted.
+        url:
+          type: string
+          format: uri
+          description: The hypermedia URL of this resource.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was created.
+        edited:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was edited.
+      description: >-
+        A People resource is an individual person or character within the Star
+        Wars universe.
+      required:
+        - name
+        - birth_year
+        - eye_color
+        - gender
+        - hair_color
+        - height
+        - mass
+        - skin_color
+        - homeworld
+        - films
+        - species
+        - starships
+        - vehicles
+        - url
+        - created
+        - edited
+    Planet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of this planet.
+        diameter:
+          type: string
+          description: The diameter of this planet in kilometers.
+        rotation_period:
+          type: string
+          description: >-
+            The number of standard hours it takes for this planet to complete a
+            single rotation on its axis.
+        orbital_period:
+          type: string
+          description: >-
+            The number of standard days it takes for this planet to complete a
+            single orbit of its local star.
+        gravity:
+          type: string
+          description: >-
+            A number denoting the gravity of this planet, where "1" is normal or
+            1 standard G. "2" is twice or 2 standard Gs. "0.5" is half or 0.5
+            standard Gs.
+        population:
+          type: string
+          description: The average population of sentient beings inhabiting this planet.
+        climate:
+          type: string
+          description: The climate of this planet. Comma separated if diverse.
+        terrain:
+          type: string
+          description: The terrain of this planet. Comma separated if diverse.
+        surface_water:
+          type: string
+          description: >-
+            The percentage of the planet surface that is naturally occurring
+            water or bodies of water.
+        residents:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of People URL Resources that live on this planet.
+        films:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of Film URL Resources that this planet has appeared in.
+        url:
+          type: string
+          format: uri
+          description: The hypermedia URL of this resource.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was created.
+        edited:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was edited.
+      description: >-
+        A Planet resource is a large mass, planet or planetoid in the Star Wars
+        Universe, at the time of 0 ABY.
+      required:
+        - name
+        - diameter
+        - rotation_period
+        - orbital_period
+        - gravity
+        - population
+        - climate
+        - terrain
+        - surface_water
+        - residents
+        - films
+        - url
+        - created
+        - edited
+    Root:
+      type: object
+      properties:
+        films:
+          type: string
+          format: uri
+          description: The URL root for Film resources.
+        people:
+          type: string
+          format: uri
+          description: The URL root for People resources.
+        planets:
+          type: string
+          format: uri
+          description: The URL root for Planet resources.
+        species:
+          type: string
+          format: uri
+          description: The URL root for Species resources.
+        starships:
+          type: string
+          format: uri
+          description: The URL root for Starships resources.
+        vehicles:
+          type: string
+          format: uri
+          description: The URL root for Vehicles resources.
+      description: >-
+        The Root resource provides information on all available resources within
+        the
+
+        API.
+      required:
+        - films
+        - people
+        - planets
+        - species
+        - starships
+        - vehicles
+    Starship:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of this starship. The common name, such as "Death Star".
+        model:
+          type: string
+          description: >-
+            The model or official name of this starship. Such as "T-65 X-wing"
+            or "DS-1 Orbital Battle Station".
+        starship_class:
+          type: string
+          description: >-
+            The class of this starship, such as "Starfighter" or "Deep Space
+            Mobile Battlestation"
+        manufacturer:
+          type: string
+          description: The manufacturer of this starship. Comma separated if more than one.
+        cost_in_credits:
+          type: string
+          description: The cost of this starship new, in galactic credits.
+        length:
+          type: string
+          description: The length of this starship in meters.
+        crew:
+          type: string
+          description: The number of personnel needed to run or pilot this starship.
+        passengers:
+          type: string
+          description: The number of non-essential people this starship can transport.
+        max_atmosphering_speed:
+          type: string
+          description: >-
+            The maximum speed of this starship in the atmosphere. "N/A" if this
+            starship is incapable of atmospheric flight.
+        hyperdrive_rating:
+          type: string
+          description: The class of this starships hyperdrive.
+        MGLT:
+          type: string
+          description: >-
+            The Maximum number of Megalights this starship can travel in a
+            standard hour. A "Megalight" is a standard unit of distance and has
+            never been defined before within the Star Wars universe. This figure
+            is only really useful for measuring the difference in speed of
+            starships. We can assume it is similar to AU, the distance between
+            our Sun (Sol) and Earth.
+        cargo_capacity:
+          type: string
+          description: The maximum number of kilograms that this starship can transport.
+        consumables:
+          type: string
+          description: >-
+            The maximum length of time that this starship can provide
+            consumables for its entire crew without having to resupply.
+        films:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of Film URL Resources that this starship has appeared in.
+        pilots:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: >-
+            An array of People URL Resources that this starship has been piloted
+            by.
+        url:
+          type: string
+          format: uri
+          description: The hypermedia URL of this resource.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was created.
+        edited:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was edited.
+      description: >-
+        A Starship resource is a single transport craft that has hyperdrive
+        capability.
+      required:
+        - name
+        - model
+        - starship_class
+        - manufacturer
+        - cost_in_credits
+        - length
+        - crew
+        - passengers
+        - max_atmosphering_speed
+        - hyperdrive_rating
+        - MGLT
+        - cargo_capacity
+        - consumables
+        - films
+        - pilots
+        - url
+        - created
+        - edited
+    Vehicle:
+      type: object
+      properties:
+        name:
+          type: string
+          description: >-
+            The name of this vehicle. The common name, such as "Sand Crawler" or
+            "Speeder bike".
+        model:
+          type: string
+          description: >-
+            The model or official name of this vehicle. Such as "All-Terrain
+            Attack Transport".
+        vehicle_class:
+          type: string
+          description: The class of this vehicle, such as "Wheeled" or "Repulsorcraft".
+        manufacturer:
+          type: string
+          description: The manufacturer of this vehicle. Comma separated if more than one.
+        length:
+          type: string
+          description: The length of this vehicle in meters.
+        cost_in_credits:
+          type: string
+          description: The cost of this vehicle new, in Galactic Credits.
+        crew:
+          type: string
+          description: The number of personnel needed to run or pilot this vehicle.
+        passengers:
+          type: string
+          description: The number of non-essential people this vehicle can transport.
+        max_atmosphering_speed:
+          type: string
+          description: The maximum speed of this vehicle in the atmosphere.
+        cargo_capacity:
+          type: string
+          description: The maximum number of kilograms that this vehicle can transport.
+        consumables:
+          type: string
+          description: >-
+            The maximum length of time that this vehicle can provide consumables
+            for its entire crew without having to resupply.
+        films:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of Film URL Resources that this vehicle has appeared in.
+        pilots:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: >-
+            An array of People URL Resources that this vehicle has been piloted
+            by.
+        url:
+          type: string
+          format: uri
+          description: The hypermedia URL of this resource.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was created.
+        edited:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was edited.
+      description: >-
+        A Vehicle resource is a single transport craft that **does not have**
+        hyperdrive capability.
+      required:
+        - name
+        - model
+        - vehicle_class
+        - manufacturer
+        - length
+        - cost_in_credits
+        - crew
+        - passengers
+        - max_atmosphering_speed
+        - cargo_capacity
+        - consumables
+        - films
+        - pilots
+        - url
+        - created
+        - edited
+    species.Species:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of this species.
+        classification:
+          type: string
+          description: The classification of this species, such as "mammal" or "reptile".
+        designation:
+          type: string
+          description: The designation of this species, such as "sentient".
+        average_height:
+          type: string
+          description: The average height of this species in centimeters.
+        average_lifespan:
+          type: string
+          description: The average lifespan of this species in years.
+        eye_colors:
+          type: string
+          description: >-
+            A comma-separated string of common eye colors for this species,
+            "none" if this species does not typically have eyes.
+        hair_colors:
+          type: string
+          description: >-
+            A comma-separated string of common hair colors for this species,
+            "none" if this species does not typically have hair.
+        skin_colors:
+          type: string
+          description: >-
+            A comma-separated string of common skin colors for this species,
+            "none" if this species does not typically have skin.
+        language:
+          type: string
+          description: The language commonly spoken by this species.
+        homeworld:
+          type: string
+          format: uri
+          description: >-
+            The URL of a planet resource, a planet that this species originates
+            from.
+        people:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of People URL Resources that are a part of this species.
+        films:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: An array of Film URL Resources that this species has appeared in.
+        url:
+          type: string
+          format: uri
+          description: The hypermedia URL of this resource.
+        created:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was created.
+        edited:
+          type: string
+          format: date-time
+          description: The ISO 8601 date format of the time that this resource was edited.
+      description: >-
+        A Species resource is a type of person or character within the Star Wars
+        Universe.
+      required:
+        - name
+        - classification
+        - designation
+        - average_height
+        - average_lifespan
+        - eye_colors
+        - hair_colors
+        - skin_colors
+        - language
+        - homeworld
+        - people
+        - films
+        - url
+        - created
+        - edited
+servers:
+  - url: https://swapi.dev/api/
+    description: SWAPI server
+    variables: {}

@@ -1,7 +1,7 @@
 const appRoutes = {
   root: "/",
-  character(id: string) {
-    return `/character/${id}`;
+  person(id: string) {
+    return `/person/${id}`;
   },
   vehicle(id: string) {
     return `/vehicle/${id}`;

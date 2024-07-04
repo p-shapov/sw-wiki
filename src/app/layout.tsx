@@ -1,3 +1,5 @@
+import "@sw-wiki/core/theme/styles.css";
+
 import RootProvider from "./provider";
 
 const metadata = {
