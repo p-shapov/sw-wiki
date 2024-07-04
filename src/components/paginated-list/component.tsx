@@ -12,6 +12,7 @@ import type {
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -70,13 +71,31 @@ const PaginatedList = clientOnly(
             <PaginationItem>
               <PaginationPrevious onClick={handlePrevious} />
             </PaginationItem>
-            {Array.from({ length: list.data.pages }).map((_, index) => (
-              <PaginationItem key={index} onClick={mkHandlePage(index + 1)}>
-                <PaginationLink isActive={index + 1 === Number(page)}>
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
+            {Array.from({ length: list.data.pages }).map((_, index) => {
+              if (
+                index === 0 ||
+                index === list.data.pages - 1 ||
+                (index >= Number(page) - 2 && index <= Number(page) + 2)
+              ) {
+                return (
+                  <PaginationItem key={index} onClick={mkHandlePage(index + 1)}>
+                    <PaginationLink isActive={index + 1 === Number(page)}>
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              } else if (
+                index === Number(page) - 3 ||
+                index === Number(page) + 3
+              ) {
+                return (
+                  <PaginationItem key={index}>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                );
+              }
+              return null;
+            })}
             <PaginationItem>
               <PaginationNext onClick={handleNext} />
             </PaginationItem>
