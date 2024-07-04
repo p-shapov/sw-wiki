@@ -15,7 +15,14 @@ const useListPeopleQuery = createQuery({
         },
       })
       .then((response) => ({
-        ...response,
+        count: response.count,
+        pages: Math.ceil(response.count / 10),
+        next: response.next?.split("=").slice(-1)[0]
+          ? Number(response.next.split("=").slice(-1)[0])
+          : null,
+        previous: response.previous?.split("=").slice(-1)[0]
+          ? Number(response.previous.split("=").slice(-1)[0])
+          : null,
         results: response.results.map((person) => ({
           ...person,
           id: person.url.split("/").slice(-2)[0],

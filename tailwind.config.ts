@@ -6,6 +6,8 @@ const config = {
     "./src/layouts/**/*.{ts,tsx}",
     "./src/modules/**/*.{ts,tsx}",
     "./src/templates/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/containers/**/*.{ts,tsx}",
     "./src/shared/**/*.{ts,tsx}",
     "./src/app/**/*.{ts,tsx}",
 	],
@@ -75,7 +77,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
 } satisfies Config
 
 export default config
