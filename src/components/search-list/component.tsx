@@ -33,7 +33,7 @@ type SearchListProps<TData extends { id: string }> = {
   onSearch?: (query: string) => void;
 };
 
-const searchListSchema = z.object({
+const schema = z.object({
   query: z.string(),
 });
 type SearchCommandProps<TData extends { id: string }> = {
@@ -74,7 +74,7 @@ const SearchCommand = React.forwardRef(
     );
     const suggestedQueries = useListQuery({
       variables: {
-        search: React.useDeferredValue(value),
+        search: value,
         page: 1,
       },
       select: (data) =>
@@ -165,7 +165,7 @@ const SearchList = clientOnly(({ onSearch, select, useListQuery }) => {
     defaultValues: {
       query,
     },
-    resolver: zodResolver(searchListSchema),
+    resolver: zodResolver(schema),
   });
   const [recentQueries, setRecentQueries] = useLocalStorage(
     "recentQueries" + useListPeopleQuery.getKey()[0],

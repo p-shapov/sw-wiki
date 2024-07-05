@@ -3,8 +3,8 @@ import { PaginatedList } from "@sw-wiki/components/paginated-list/component";
 import { appRoutes } from "@sw-wiki/core/routes";
 import { useListPeopleQuery } from "@sw-wiki/shared/queries/useListPeopleQuery";
 import {
+  TypographyMuted,
   TypographyParagraph,
-  TypographySmall,
 } from "@sw-wiki/shared/ui/typography/component";
 
 type PeopleListProps = {
@@ -17,14 +17,14 @@ const PeopleList: React.FC<PeopleListProps> = ({ searchQuery }) => {
       useListQuery={useListPeopleQuery}
       searchQuery={searchQuery}
       render={(person) => (
-        <TypographyParagraph className="w-max">
-          {person.name}
+        <div>
+          <TypographyParagraph className="w-max">
+            {person.name}
+          </TypographyParagraph>
           <Link href={appRoutes.person(person.id)}>
-            <TypographySmall className="text-muted-foreground">
-              Read more
-            </TypographySmall>
+            <TypographyMuted>Read more</TypographyMuted>
           </Link>
-        </TypographyParagraph>
+        </div>
       )}
     />
   );

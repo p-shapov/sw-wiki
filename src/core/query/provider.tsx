@@ -2,11 +2,12 @@
 
 import { QueryClientProvider as ClientProvider } from "@tanstack/react-query";
 
-import { queryClient } from "./client";
+import { getQueryClient } from "./client";
 
 const QueryClientProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const queryClient = getQueryClient();
   return <ClientProvider client={queryClient}>{children}</ClientProvider>;
 };
 

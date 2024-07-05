@@ -18,4 +18,14 @@ type InferQueryHookResult<T extends QueryHook<any, any, any>> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends QueryHook<infer R, any, any> ? R : never;
 
-export type { ListQueryResult, ListQueryVariables, InferQueryHookResult };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type InferQueryHookVariables<T extends QueryHook<any, any, any>> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends QueryHook<any, infer V, any> ? V : never;
+
+export type {
+  ListQueryResult,
+  ListQueryVariables,
+  InferQueryHookResult,
+  InferQueryHookVariables,
+};

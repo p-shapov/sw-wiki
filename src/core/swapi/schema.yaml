@@ -526,6 +526,10 @@ components:
         name:
           type: string
           description: The name of this person.
+        bio:
+          type: string
+          description: >-
+            The biography of this person. Comma separated if more than one.
         birth_year:
           type: string
           description: >-

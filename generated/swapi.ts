@@ -32,6 +32,7 @@ const Film = z
 const Person = z
   .object({
     name: z.string(),
+    bio: z.string().optional(),
     birth_year: z.string(),
     eye_color: z.string(),
     gender: z.string(),

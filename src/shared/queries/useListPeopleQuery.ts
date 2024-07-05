@@ -6,13 +6,17 @@ import { swapiAxiosClient } from "@sw-wiki/core/swapi/client";
 const useListPeopleQuery = createQuery({
   queryKey: ["allPeople"],
   placeholderData: keepPreviousData,
-  fetcher: (variables?: { page?: number; search?: string }) =>
+  fetcher: (
+    variables: { page?: number; search?: string },
+    ctx?: { signal?: AbortSignal },
+  ) =>
     swapiAxiosClient
       .ListPeople({
         queries: {
           page: variables?.page,
           search: variables?.search,
         },
+        signal: ctx?.signal,
       })
       .then((response) => ({
         count: response.count,
@@ -26,6 +30,7 @@ const useListPeopleQuery = createQuery({
         results: response.results.map((person) => ({
           ...person,
           id: person.url.split("/").slice(-2)[0],
+          bio: person.bio || "n/a",
         })),
       })),
 });

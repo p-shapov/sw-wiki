@@ -32,7 +32,7 @@ const PaginatedList = clientOnly(
     const [search] = useSearchParamStorage("query", searchQuery);
     const list = useListQuery({
       variables: {
-        search: React.useDeferredValue(search),
+        search,
         page: Number(page),
       },
     });
@@ -41,7 +41,7 @@ const PaginatedList = clientOnly(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
     if (!list.data) {
-      return "loading";
+      return "Loading...";
     }
     if (list.data.results.length === 0) {
       return emptyMessage ?? "No results found";
