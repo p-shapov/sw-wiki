@@ -62,7 +62,7 @@ const PersonCardBioItem = forwardRef<
         <textarea
           ref={ref}
           value={value}
-          className="bg-accent px-3 py-0 text-inherit/7 w-full min-h-[25rem] font-italic"
+          className="bg-popover px-3 py-0 text-inherit/7 w-full border rounded-md h-[18.25rem] min-h-max font-italic"
           onChange={(e) => onValueChange(e.target.value)}
         />
       ) : (
@@ -83,7 +83,7 @@ const PersonCardItem = forwardRef<HTMLInputElement, PersonCardItemProps>(
               ref={ref}
               type="text"
               value={value}
-              className="bg-accent px-3 py-0 text-inherit/7 font-italic"
+              className="bg-popover border rounded-md px-3 py-0 text-inherit/7 font-italic"
               onChange={(e) => onValueChange(e.target.value)}
             />
           ) : (
@@ -184,7 +184,7 @@ const PersonCard: React.FC<PersonCardProps> = clientOnly(
                 )}
               </span>
             </TypographyH1>
-            <TypographyUList className="grid gap-y-4">
+            <TypographyUList className="grid gap-y-4 h-max">
               <FormItem>
                 <FormField
                   control={form.control}
