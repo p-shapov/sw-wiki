@@ -41,7 +41,6 @@ type PersonCardBioItemProps = {
 };
 
 const schema = z.object({
-  name: z.string().min(1),
   birth_year: z.string().min(1),
   eye_color: z.string().min(1),
   skin_color: z.string().min(1),
@@ -100,7 +99,6 @@ const PersonCard: React.FC<PersonCardProps> = clientOnly(
   ({ className, personId }) => {
     const form = useForm({
       defaultValues: {
-        name: "",
         birth_year: "",
         eye_color: "",
         skin_color: "",
@@ -187,22 +185,6 @@ const PersonCard: React.FC<PersonCardProps> = clientOnly(
               </span>
             </TypographyH1>
             <TypographyUList className="grid gap-y-4">
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Name"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
               <FormItem>
                 <FormField
                   control={form.control}

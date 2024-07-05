@@ -35,11 +35,12 @@ const PaginatedList = clientOnly(
         search,
         page: Number(page),
       },
+      retry: false,
     });
     React.useEffect(() => {
-      if (page !== "1") setPage("1");
+      if (list.isError) setPage("1");
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search]);
+    }, [search, list.isError]);
     if (!list.data) {
       return "Loading...";
     }
