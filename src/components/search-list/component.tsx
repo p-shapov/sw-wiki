@@ -1,4 +1,4 @@
-// FIX - Fix the issue with the keyboard navigation of the search command items.
+// ISSUE (#1) - Fix the issue with the keyboard navigation of the search command items.
 
 "use client";
 
