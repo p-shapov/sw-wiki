@@ -49,6 +49,6 @@
     @apply border-border scrollbar-thin scrollbar-thumb-accent scrollbar-track-background;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground scrollbar-thin scrollbar-thumb-accent scrollbar-track-background;
   }
 }
