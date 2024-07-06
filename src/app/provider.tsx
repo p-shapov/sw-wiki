@@ -1,3 +1,4 @@
+import NextTopLoader from "nextjs-toploader";
 import React from "react";
 
 import { GlobalProvider } from "@sw-wiki/core/global/provider";
@@ -9,6 +10,7 @@ const RootProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     <QueryClientProvider>
       <ThemeProvider>
         <GlobalProvider>{children}</GlobalProvider>
+        <NextTopLoader color="var(--gradient)" />
       </ThemeProvider>
     </QueryClientProvider>
   );
