@@ -12,7 +12,7 @@ type PersonDataParams = {
 const usePersonData = ({ variables }: PersonDataParams) => {
   const personId = variables.personId;
   const [persistedJson, setPersistedJson] = useLocalStorage<string | null>(
-    "person/" +
+    "person-card/" +
       personId.toString() +
       `/v${process.env.NEXT_PUBLIC_CHARACTER_STORAGE_VERSION}`,
     null,

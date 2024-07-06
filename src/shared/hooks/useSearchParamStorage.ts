@@ -1,19 +1,33 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
-const useSearchParamStorage = (param: string, defaultValue: string) => {
+const useSearchParamStorage = <TParam extends string>(
+  params: Array<TParam>,
+  defaultValue: Record<TParam, string>,
+) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const value = searchParams.get(param) || defaultValue;
-  const setValue = React.useCallback(
-    (newValue: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(param, newValue);
-      router.push(pathname + "?" + params.toString());
-    },
-    [param, searchParams, pathname, router],
-  );
+  const value = React.useMemo(() => {
+    const result = {} as Record<TParam, string>;
+    for (const param of params) {
+      result[param] = searchParams.get(param) ?? defaultValue[param];
+    }
+    return result;
+  }, [params, searchParams, defaultValue]);
+  const setValue: React.Dispatch<React.SetStateAction<Record<TParam, string>>> =
+    React.useCallback(
+      (stateAction) => {
+        const nextState =
+          typeof stateAction === "function" ? stateAction(value) : stateAction;
+        const nextSearchParams = new URLSearchParams();
+        for (const param of params) {
+          nextSearchParams.set(param, nextState[param]);
+        }
+        router.push(pathname + "?" + nextSearchParams.toString());
+      },
+      [params, value, pathname, router],
+    );
   return [value, setValue] as const;
 };
 

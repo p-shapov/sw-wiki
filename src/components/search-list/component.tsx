@@ -9,7 +9,6 @@ import type { QueryHook } from "react-query-kit";
 import { z } from "zod";
 
 import { clientOnly } from "@sw-wiki/shared/hocs/clientOnly";
-import { useSearchParamStorage } from "@sw-wiki/shared/hooks/useSearchParamStorage";
 import { useListPeopleQuery } from "@sw-wiki/shared/queries/useListPeopleQuery";
 import type {
   ListQueryResult,
@@ -28,9 +27,10 @@ import {
 import { Form, FormField, FormItem } from "@sw-wiki/shared/ui/form/component";
 
 type SearchListProps<TData extends { id: string }> = {
+  query: string;
   useListQuery: QueryHook<ListQueryResult<TData>, ListQueryVariables>;
   select: (item: TData) => string;
-  onSearch?: (query: string) => void;
+  onQueryChange: (query: string) => void;
 };
 
 const schema = z.object({
@@ -159,62 +159,65 @@ const SearchCommand = React.forwardRef(
  *   so it's not possible to enter an arbitrary query. This is a known issue and has been reported in [Issue #171](https://github.com/pacocoursey/cmdk/issues/171).
  */
 
-const SearchList = clientOnly(({ onSearch, select, useListQuery }) => {
-  const [query, setQuery] = useSearchParamStorage("query", "");
-  const form = useForm({
-    defaultValues: {
-      query,
-    },
-    resolver: zodResolver(schema),
-  });
-  const [recentQueries, setRecentQueries] = useLocalStorage(
-    "recentQueries" + useListPeopleQuery.getKey()[0],
-    [] as string[],
-  );
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  React.useEffect(() => {
-    form.setValue("query", query);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-  const handleSearch = ({ query }: { query: string }) => {
-    setRecentQueries((prev) => {
-      const next = [query, ...prev.filter((item) => item !== query && !!item)];
-      return next;
+const SearchList = clientOnly(
+  ({ query, onQueryChange, select, useListQuery }) => {
+    const form = useForm({
+      defaultValues: {
+        query,
+      },
+      resolver: zodResolver(schema),
     });
-    onSearch?.(query);
-    setQuery(query);
-    setDialogOpen(false);
-  };
-  const handleShortcut = (query: string) => {
-    form.setValue("query", query);
-    handleSearch({ query });
-  };
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSearch)}>
-        <FormItem>
-          <FormField
-            control={form.control}
-            name="query"
-            render={({ field }) => (
-              <SearchCommand
-                ref={field.ref}
-                useListQuery={useListQuery}
-                open={dialogOpen}
-                value={field.value}
-                select={select}
-                onValueChange={field.onChange}
-                recentQueries={recentQueries}
-                onShortcut={handleShortcut}
-                onOpenChange={setDialogOpen}
-              />
-            )}
-          />
-        </FormItem>
-      </form>
-    </Form>
-  );
-}) as <TData extends { id: string }>(
+    const [recentQueries, setRecentQueries] = useLocalStorage(
+      "search-list/recent" + useListPeopleQuery.getKey()[0],
+      [] as string[],
+    );
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+    React.useEffect(() => {
+      form.setValue("query", query);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [query]);
+    const handleSearch = ({ query }: { query: string }) => {
+      setRecentQueries((prev) => {
+        const next = [
+          query,
+          ...prev.filter((item) => item !== query && !!item),
+        ];
+        return next;
+      });
+      onQueryChange(query);
+      setDialogOpen(false);
+    };
+    const handleShortcut = (query: string) => {
+      form.setValue("query", query);
+      handleSearch({ query });
+    };
+    return (
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSearch)}>
+          <FormItem>
+            <FormField
+              control={form.control}
+              name="query"
+              render={({ field }) => (
+                <SearchCommand
+                  ref={field.ref}
+                  useListQuery={useListQuery}
+                  open={dialogOpen}
+                  value={field.value}
+                  select={select}
+                  onValueChange={field.onChange}
+                  recentQueries={recentQueries}
+                  onShortcut={handleShortcut}
+                  onOpenChange={setDialogOpen}
+                />
+              )}
+            />
+          </FormItem>
+        </form>
+      </Form>
+    );
+  },
+) as <TData extends { id: string }>(
   props: SearchListProps<TData>,
 ) => React.ReactNode;
 
