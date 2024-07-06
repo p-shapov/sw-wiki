@@ -78,7 +78,7 @@ const PaginatedList = <TData extends { id: string }>({
   };
   return (
     <div className="grid gap-y-8">
-      <ul className="grid gap-y-2">
+      <ul className="grid grid-rows-10 gap-y-2">
         {list.data.results.map((item) => (
           <li
             key={item.id}
@@ -93,7 +93,10 @@ const PaginatedList = <TData extends { id: string }>({
       <Pagination className="w-max mx-[0]">
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious onClick={handlePrevious} />
+            <PaginationPrevious
+              onClick={handlePrevious}
+              disabled={!list.data.previous}
+            />
           </PaginationItem>
           {Array.from({ length: list.data.pages }).map((_, index) => {
             if (
@@ -121,7 +124,7 @@ const PaginatedList = <TData extends { id: string }>({
             return null;
           })}
           <PaginationItem>
-            <PaginationNext onClick={handleNext} />
+            <PaginationNext onClick={handleNext} disabled={!list.data.next} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
