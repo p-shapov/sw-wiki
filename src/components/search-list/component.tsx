@@ -1,4 +1,4 @@
-// TODO - Fix the issue with the keyboard navigation of the search command items.
+// FIX - Fix the issue with the keyboard navigation of the search command items.
 
 "use client";
 

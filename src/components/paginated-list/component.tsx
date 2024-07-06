@@ -1,3 +1,5 @@
+// FIX - Fix issue with search params reset when the modal route is executed.
+
 "use client";
 
 import { keepPreviousData } from "@tanstack/react-query";
@@ -39,6 +41,8 @@ type PaginatedListProps<TData extends { id: string }> = {
  * @param {string} searchQuery - The search query string.
  * @param {string} emptyMessage - The message to display when the list is empty.
  * @param {(page: number) => void} onPageChange - The callback function for page change events.
+ *
+ * Known issues: - The search params reset when the [modal](https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes) route is executed.
  */
 
 const PaginatedList = <TData extends { id: string }>({
