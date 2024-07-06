@@ -4,6 +4,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { keepPreviousData } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -26,6 +27,7 @@ import {
   CommandList,
 } from "@sw-wiki/shared/ui/command/component";
 import { Form, FormField, FormItem } from "@sw-wiki/shared/ui/form/component";
+import { cn } from "@sw-wiki/shared/utils/common";
 
 type SearchCommandProps<TData extends { id: string }> = {
   value: string;
@@ -68,6 +70,7 @@ const SearchCommand = React.forwardRef(
         search: value,
         page: 1,
       },
+      placeholderData: keepPreviousData,
       select: (data) =>
         data.results
           .map(select)
@@ -118,7 +121,12 @@ const SearchCommand = React.forwardRef(
               </CommandGroup>
             )}
             {!!suggestedQueries.data?.length && (
-              <CommandGroup heading="Suggestions">
+              <CommandGroup
+                heading="Suggestions"
+                className={cn({
+                  "opacity-20": suggestedQueries.isFetching,
+                })}
+              >
                 {suggestedQueries.data.map((query) => (
                   <CommandItem key={query} asChild>
                     <button

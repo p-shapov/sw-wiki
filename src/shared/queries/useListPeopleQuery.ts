@@ -1,11 +1,9 @@
-import { keepPreviousData } from "@tanstack/react-query";
 import { createQuery } from "react-query-kit";
 
 import { swapiAxiosClient } from "@sw-wiki/core/swapi/client";
 
 const useListPeopleQuery = createQuery({
   queryKey: ["allPeople"],
-  placeholderData: keepPreviousData,
   fetcher: (
     variables: { page?: number; search?: string },
     ctx?: { signal?: AbortSignal },

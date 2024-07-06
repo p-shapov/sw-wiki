@@ -1,5 +1,6 @@
 "use client";
 
+import { keepPreviousData } from "@tanstack/react-query";
 import React from "react";
 import type { QueryHook } from "react-query-kit";
 
@@ -16,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@sw-wiki/shared/ui/pagination/component";
+import { cn } from "@sw-wiki/shared/utils/common";
 
 type PaginatedListProps<TData extends { id: string }> = {
   page: number;
@@ -52,6 +54,7 @@ const PaginatedList = <TData extends { id: string }>({
       search: searchQuery,
       page,
     },
+    placeholderData: keepPreviousData,
     retry: false,
   });
   if (!list.data) {
@@ -77,7 +80,14 @@ const PaginatedList = <TData extends { id: string }>({
     <div className="grid gap-y-8">
       <ul className="grid gap-y-2">
         {list.data.results.map((item) => (
-          <li key={item.id}>{render(item)}</li>
+          <li
+            key={item.id}
+            className={cn({
+              "opacity-20": list.isFetching,
+            })}
+          >
+            {render(item)}
+          </li>
         ))}
       </ul>
       <Pagination className="w-max mx-[0]">
