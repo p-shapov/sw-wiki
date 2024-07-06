@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import React from "react";
 
 import { getQueryClient } from "@sw-wiki/core/query/client";
-import { SearchPage } from "@sw-wiki/modules/SearchPage/component";
+import { SearchPerson } from "@sw-wiki/modules/search-person/component";
 import { useListPeopleQuery } from "@sw-wiki/shared/queries/useListPeopleQuery";
 import type { InferQueryHookVariables } from "@sw-wiki/shared/types";
 
@@ -27,7 +27,7 @@ const RootPage: React.FC<RootPageProps> = async ({ searchParams }) => {
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <SearchPage />
+      <SearchPerson />
     </HydrationBoundary>
   );
 };

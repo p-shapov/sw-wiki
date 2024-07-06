@@ -1,10 +1,10 @@
 import { PersonCard } from "@sw-wiki/containers/person-card/component";
 
-type PersonInfoPageProps = {
+type PersonInfoProps = {
   id: string;
 };
 
-const PersonInfoPage: React.FC<PersonInfoPageProps> = ({ id }) => {
+const PersonInfo: React.FC<PersonInfoProps> = ({ id }) => {
   return (
     <div className="grid container">
       <PersonCard id={id} />
@@ -12,4 +12,4 @@ const PersonInfoPage: React.FC<PersonInfoPageProps> = ({ id }) => {
   );
 };
 
-export { PersonInfoPage };
+export { PersonInfo };

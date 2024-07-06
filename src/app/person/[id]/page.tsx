@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 
 import { getQueryClient } from "@sw-wiki/core/query/client";
-import { PersonInfoPage } from "@sw-wiki/modules/PersonInfoPage/component";
+import { PersonInfo } from "@sw-wiki/modules/person-info/component";
 import { usePersonQuery } from "@sw-wiki/shared/queries/usePersonQuery";
 import type { InferQueryHookVariables } from "@sw-wiki/shared/types";
 
@@ -28,7 +28,7 @@ const PersonPage: React.FC<PersonPageProps> = async ({ params }) => {
   }
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PersonInfoPage id={id} />
+      <PersonInfo id={id} />
     </HydrationBoundary>
   );
 };
