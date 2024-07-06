@@ -57,7 +57,7 @@ const InfoCardAttribute = React.forwardRef<
             ref={ref}
             type="text"
             value={value}
-            className="bg-popover border rounded-md px-3 py-0 text-inherit/7 font-italic"
+            className="bg-popover border rounded-md px-3 py-0 text-inherit/7 font-italic focus:outline-none focus:ring-offset-2 focus:ring-ring"
             onChange={(e) => onValueChange(e.target.value)}
           />
         ) : (
@@ -87,7 +87,7 @@ const InfoCardInfoParagraph = React.forwardRef<
           <textarea
             ref={ref}
             value={value}
-            className="bg-popover px-3 py-2 text-inherit/7 w-full border rounded-md h-[18.25rem] min-h-max font-italic"
+            className="bg-popover px-3 py-2 text-inherit/7 w-full border rounded-md h-[18.25rem] min-h-max font-italic focus:outline-none focus:ring-offset-2 focus:ring-ring"
             onChange={(e) => onValueChange(e.target.value)}
           />
         ) : (
@@ -192,7 +192,7 @@ const InfoCard = <
           </div>
         </div>
         <form className="flex gap-x-10 w-full" onSubmit={handleSave}>
-          <div className="flex-2 grid gap-y-10 h-max">
+          <div className="flex-3 grid gap-y-10 h-max">
             {infoNodes.map((node) => (
               <div key={node.title} className="grid gap-y-8">
                 <TypographyH2>{node.title}</TypographyH2>
@@ -219,7 +219,7 @@ const InfoCard = <
               </div>
             ))}
           </div>
-          <div className="flex-1 flex-col gap-y-8 h-max">
+          <div className="flex-2 flex-col gap-y-8 h-max">
             {attributesNodes.map((node) => (
               <div key={node.title}>
                 <TypographyH3 className="pl-6">{node.title}</TypographyH3>

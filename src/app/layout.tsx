@@ -1,4 +1,5 @@
 import "@sw-wiki/core/theme/styles.css";
+
 import { Inter as FontSans } from "next/font/google";
 
 import { MainLayout } from "@sw-wiki/layouts/main-layout/component";
@@ -15,12 +16,22 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
-const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
+type RootLayoutProps = {
+  drawer: React.ReactNode;
+};
+
+const RootLayout: React.FC<React.PropsWithChildren<RootLayoutProps>> = ({
+  children,
+  drawer,
+}) => {
   return (
     <html lang="en">
       <body className={cn("font-sans", fontSans.variable)}>
         <RootProvider>
-          <MainLayout>{children}</MainLayout>
+          <MainLayout>
+            {children}
+            {drawer}
+          </MainLayout>
         </RootProvider>
       </body>
     </html>
