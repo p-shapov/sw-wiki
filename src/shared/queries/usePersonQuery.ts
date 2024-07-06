@@ -4,10 +4,10 @@ import { swapiAxiosClient } from "@sw-wiki/core/swapi/client";
 
 const usePersonQuery = createQuery({
   queryKey: ["person"],
-  fetcher: (variables: { personId: number }, ctx?: { signal: AbortSignal }) =>
+  fetcher: (variables: { id: string }, ctx?: { signal: AbortSignal }) =>
     swapiAxiosClient
       .GetPerson({
-        params: { personId: variables.personId },
+        params: { personId: Number(variables.id) },
         signal: ctx?.signal,
       })
       .then((response) => ({

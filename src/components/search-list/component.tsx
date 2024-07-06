@@ -1,3 +1,5 @@
+// TODO - Fix the issue with the keyboard navigation of the search command items.
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,16 +28,6 @@ import {
 } from "@sw-wiki/shared/ui/command/component";
 import { Form, FormField, FormItem } from "@sw-wiki/shared/ui/form/component";
 
-type SearchListProps<TData extends { id: string }> = {
-  query: string;
-  useListQuery: QueryHook<ListQueryResult<TData>, ListQueryVariables>;
-  select: (item: TData) => string;
-  onQueryChange: (query: string) => void;
-};
-
-const schema = z.object({
-  query: z.string(),
-});
 type SearchCommandProps<TData extends { id: string }> = {
   value: string;
   open: boolean;
@@ -153,7 +145,29 @@ const SearchCommand = React.forwardRef(
   ref: React.ForwardedRef<HTMLInputElement>,
 ) => React.ReactNode;
 
+type SearchListProps<TData extends { id: string }> = {
+  query: string;
+  useListQuery: QueryHook<ListQueryResult<TData>, ListQueryVariables>;
+  select: (item: TData) => string;
+  onQueryChange: (query: string) => void;
+};
+
+const schema = z.object({
+  query: z.string(),
+});
+
 /**
+ * Renders a search list component.
+ *
+ * @template TData - The type of the search result items.
+ *
+ * @param {string} query - The current search query.
+ * @param {QueryHook<ListQueryResult<TData>, ListQueryVariables>} useListQuery - The React Query hook for fetching search results.
+ * @param {(data: TData) => string} select - A function that maps an item from the search results to a string value.
+ * @param {(query: string) => void} onQueryChange - A callback function that is called when the search query changes.
+ *
+ * @returns {React.ReactNode} The rendered SearchList component.
+ *
  * Known issues:
  * - The search command items are not keyboard navigable because the first item is always focused,
  *   so it's not possible to enter an arbitrary query. This is a known issue and has been reported in [Issue #171](https://github.com/pacocoursey/cmdk/issues/171).

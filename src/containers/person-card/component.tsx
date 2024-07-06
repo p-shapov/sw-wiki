@@ -1,46 +1,15 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { forwardRef } from "react";
-import { useForm } from "react-hook-form";
+import React from "react";
 import { z } from "zod";
 
+import { InfoCard } from "@sw-wiki/components/info-card/component";
 import { clientOnly } from "@sw-wiki/shared/hocs/clientOnly";
-import { Button } from "@sw-wiki/shared/ui/button/component";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@sw-wiki/shared/ui/form/component";
-import {
-  TypographyH1,
-  TypographyParagraph,
-  TypographyUList,
-} from "@sw-wiki/shared/ui/typography/component";
-import { cn } from "@sw-wiki/shared/utils/common";
-
-import { usePersonData } from "./model";
-
-type PersonCardProps = {
-  className?: string;
-  personId: number;
-};
-
-type PersonCardItemProps = {
-  label: string;
-  value: string;
-  isEditing: boolean;
-  onValueChange: (value: string) => void;
-};
-
-type PersonCardBioItemProps = {
-  value: string;
-  isEditing: boolean;
-  onValueChange: (value: string) => void;
-};
+import { usePersonQuery } from "@sw-wiki/shared/queries/usePersonQuery";
+import { mapQueryHook } from "@sw-wiki/shared/utils/query";
 
 const schema = z.object({
+  name: z.string().min(1),
   birth_year: z.string().min(1),
   eye_color: z.string().min(1),
   skin_color: z.string().min(1),
@@ -48,261 +17,100 @@ const schema = z.object({
   hair_color: z.string().min(1),
   height: z.string().min(1),
   mass: z.string().min(1),
-  bio: z.string(),
+  bio: z.string().min(1),
 });
 
-const PersonCardBioItem = forwardRef<
-  HTMLTextAreaElement,
-  PersonCardBioItemProps
->(({ value, isEditing, onValueChange }, ref) => {
+const infoNodes = [
+  {
+    type: "info" as const,
+    title: "Personal Info",
+    children: [
+      {
+        type: "info-paragraph" as const,
+        title: "Bio",
+        children: "bio" as const,
+      },
+    ],
+  },
+];
+
+const attributesNodes = [
+  {
+    type: "attributes" as const,
+    title: "Attributes",
+    children: [
+      {
+        type: "attribute" as const,
+        title: "Birth Year",
+        children: "birth_year" as const,
+      },
+      {
+        type: "attribute" as const,
+        title: "Eye Color",
+        children: "eye_color" as const,
+      },
+      {
+        type: "attribute" as const,
+        title: "Skin Color",
+        children: "skin_color" as const,
+      },
+      {
+        type: "attribute" as const,
+        title: "Gender",
+        children: "gender" as const,
+      },
+      {
+        type: "attribute" as const,
+        title: "Hair Color",
+        children: "hair_color" as const,
+      },
+      {
+        type: "attribute" as const,
+        title: "Height",
+        children: "height" as const,
+      },
+      {
+        type: "attribute" as const,
+        title: "Mass",
+        children: "mass" as const,
+      },
+    ],
+  },
+];
+
+const usePersonCardQuery = mapQueryHook(usePersonQuery, (data) => ({
+  name: data.name,
+  birth_year: data.birth_year,
+  eye_color: data.eye_color,
+  skin_color: data.skin_color,
+  gender: data.gender,
+  hair_color: data.hair_color,
+  height: data.height,
+  mass: data.mass,
+  bio: data.bio,
+}));
+
+type PersonCardProps = {
+  id: string;
+};
+
+/**
+ * Renders a person card component.
+ *
+ * @param {string} id - The unique ID of the person card query.
+ */
+
+const PersonCard: React.FC<PersonCardProps> = clientOnly(({ id }) => {
   return (
-    <TypographyParagraph className="flex items-baseline gap-x-4">
-      <strong>Bio:</strong>{" "}
-      {isEditing ? (
-        <textarea
-          ref={ref}
-          value={value}
-          className="bg-popover px-3 py-0 text-inherit/7 w-full border rounded-md h-[18.25rem] min-h-max font-italic"
-          onChange={(e) => onValueChange(e.target.value)}
-        />
-      ) : (
-        <span>{value || "n/a"}</span>
-      )}
-    </TypographyParagraph>
+    <InfoCard
+      id={id}
+      name="person-card"
+      schema={schema}
+      infoNodes={infoNodes}
+      attributesNodes={attributesNodes}
+      useInfoQuery={usePersonCardQuery}
+    />
   );
 });
-
-const PersonCardItem = forwardRef<HTMLInputElement, PersonCardItemProps>(
-  ({ label, value, isEditing, onValueChange }, ref) => {
-    return (
-      <li>
-        <TypographyParagraph className="flex items-baseline gap-x-4">
-          <strong>{label}:</strong>{" "}
-          {isEditing ? (
-            <input
-              ref={ref}
-              type="text"
-              value={value}
-              className="bg-popover border rounded-md px-3 py-0 text-inherit/7 font-italic"
-              onChange={(e) => onValueChange(e.target.value)}
-            />
-          ) : (
-            <span>{value || "n/a"}</span>
-          )}
-        </TypographyParagraph>
-      </li>
-    );
-  },
-);
-
-const PersonCard: React.FC<PersonCardProps> = clientOnly(
-  ({ className, personId }) => {
-    const form = useForm({
-      defaultValues: {
-        birth_year: "",
-        eye_color: "",
-        skin_color: "",
-        bio: "",
-        gender: "",
-        hair_color: "",
-        height: "",
-        mass: "",
-      },
-      resolver: zodResolver(schema),
-    });
-    const person = usePersonData({ variables: { personId } });
-    React.useEffect(() => {
-      if (person.data) {
-        form.reset(person.data);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [person.isHydrated]);
-    const [isEditing, setIsEditing] = React.useState(false);
-    const handleStartEdit = () => {
-      setIsEditing(true);
-    };
-    const handleCancelEdit = () => {
-      setIsEditing(false);
-      if (person.data) {
-        form.reset(person.data);
-      }
-    };
-    const handleSave = () => {
-      setIsEditing(false);
-      if (person.data) {
-        person.setPersisted(
-          JSON.stringify({ ...person.data, ...form.getValues() }),
-        );
-      }
-    };
-    if (!person.data) {
-      return <div>Loading...</div>;
-    }
-    return (
-      <Form {...form}>
-        <form
-          className={cn(
-            "grid gap-x-10 gap-y-10 grid-cols-[max-content_1fr] grid-rows-[max-content_max-content]",
-            className,
-          )}
-          onSubmit={form.handleSubmit(handleSave)}
-        >
-          <FormItem className="row-start-2 pt-6 w-[30rem]">
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <PersonCardBioItem
-                  ref={field.ref}
-                  value={field.value}
-                  isEditing={isEditing}
-                  onValueChange={field.onChange}
-                />
-              )}
-            />
-            <FormMessage />
-          </FormItem>
-          <div className="grid grid-rows-[subgrid] row-start-1 row-end-3">
-            <TypographyH1 className="flex items-center gap-x-10">
-              <span>{person.data.name}</span>
-              <span className="flex gap-x-4">
-                {isEditing ? (
-                  <>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={handleCancelEdit}
-                    >
-                      Cancel
-                    </Button>
-                    <Button type="submit">Save</Button>
-                  </>
-                ) : (
-                  <Button type="button" onClick={handleStartEdit}>
-                    Edit
-                  </Button>
-                )}
-              </span>
-            </TypographyH1>
-            <TypographyUList className="grid gap-y-4 h-max">
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="birth_year"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Birth year"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="eye_color"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Eye color"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="skin_color"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Skin color"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Gender"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="hair_color"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Hair color"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="height"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Height"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-              <FormItem>
-                <FormField
-                  control={form.control}
-                  name="mass"
-                  render={({ field }) => (
-                    <PersonCardItem
-                      ref={field.ref}
-                      label="Mass"
-                      value={field.value}
-                      isEditing={isEditing}
-                      onValueChange={field.onChange}
-                    />
-                  )}
-                />
-                <FormMessage />
-              </FormItem>
-            </TypographyUList>
-          </div>
-        </form>
-      </Form>
-    );
-  },
-);
 
 export { PersonCard };

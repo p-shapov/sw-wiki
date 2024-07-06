@@ -1,13 +1,13 @@
 import { PersonCard } from "@sw-wiki/containers/person-card/component";
 
 type PersonInfoPageProps = {
-  personId: number;
+  id: string;
 };
 
-const PersonInfoPage: React.FC<PersonInfoPageProps> = ({ personId }) => {
+const PersonInfoPage: React.FC<PersonInfoPageProps> = ({ id }) => {
   return (
-    <div className="grid container p-20">
-      <PersonCard personId={personId} />
+    <div className="grid container">
+      <PersonCard id={id} />
     </div>
   );
 };

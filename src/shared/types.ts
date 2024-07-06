@@ -1,5 +1,8 @@
-import type { FieldValues, UseFormProps, UseFormReturn } from "react-hook-form";
 import type { QueryHook } from "react-query-kit";
+
+type CardQueryVariables = {
+  id: string;
+};
 
 type ListQueryVariables = {
   search?: string;
@@ -24,19 +27,10 @@ type InferQueryHookVariables<T extends QueryHook<any, any, any>> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends QueryHook<any, infer V, any> ? V : never;
 
-type UseFormHook<
-  TFieldValues extends FieldValues = FieldValues,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TContext = any,
-  TTransformedValues extends FieldValues | undefined = undefined,
-> = (
-  props?: UseFormProps<TFieldValues, TContext>,
-) => UseFormReturn<TFieldValues, TContext, TTransformedValues>;
-
 export type {
+  CardQueryVariables,
   ListQueryResult,
   ListQueryVariables,
   InferQueryHookResult,
   InferQueryHookVariables,
-  UseFormHook,
 };

@@ -3,7 +3,6 @@
 import React from "react";
 import type { QueryHook } from "react-query-kit";
 
-import { clientOnly } from "@sw-wiki/shared/hocs/clientOnly";
 import type {
   ListQueryResult,
   ListQueryVariables,
@@ -27,81 +26,97 @@ type PaginatedListProps<TData extends { id: string }> = {
   onPageChange: (page: number) => void;
 };
 
-const PaginatedList = clientOnly(
-  ({ page, render, useListQuery, searchQuery, emptyMessage, onPageChange }) => {
-    const list = useListQuery({
-      variables: {
-        search: searchQuery,
-        page,
-      },
-      retry: false,
-    });
-    if (!list.data) {
-      return "Loading...";
+/**
+ * A paginated list component.
+ *
+ * @template TData - The type of data in the list.
+ *
+ * @param {number} page - The current page number.
+ * @param {(item: TData) => React.ReactNode} render - The function to render each item in the list.
+ * @param {QueryHook<ListQueryResult<TData>, ListQueryVariables>} useListQuery - The hook function for fetching the list data.
+ * @param {string} searchQuery - The search query string.
+ * @param {string} emptyMessage - The message to display when the list is empty.
+ * @param {(page: number) => void} onPageChange - The callback function for page change events.
+ */
+
+const PaginatedList = <TData extends { id: string }>({
+  page,
+  render,
+  useListQuery,
+  searchQuery,
+  emptyMessage,
+  onPageChange,
+}: PaginatedListProps<TData>) => {
+  const list = useListQuery({
+    variables: {
+      search: searchQuery,
+      page,
+    },
+    retry: false,
+  });
+  if (!list.data) {
+    return "Loading...";
+  }
+  if (list.data.results.length === 0) {
+    return emptyMessage ?? "No results found";
+  }
+  const handlePrevious = () => {
+    if (list.data.previous) {
+      onPageChange(list.data.previous);
     }
-    if (list.data.results.length === 0) {
-      return emptyMessage ?? "No results found";
+  };
+  const handleNext = () => {
+    if (list.data.next) {
+      onPageChange(list.data.next);
     }
-    const handlePrevious = () => {
-      if (list.data.previous) {
-        onPageChange(list.data.previous);
-      }
-    };
-    const handleNext = () => {
-      if (list.data.next) {
-        onPageChange(list.data.next);
-      }
-    };
-    const mkHandlePage = (page: number) => () => {
-      onPageChange(page);
-    };
-    return (
-      <div className="grid gap-y-8">
-        <ul className="grid gap-y-2">
-          {list.data.results.map((item) => (
-            <li key={item.id}>{render(item)}</li>
-          ))}
-        </ul>
-        <Pagination className="w-max mx-[0]">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious onClick={handlePrevious} />
-            </PaginationItem>
-            {Array.from({ length: list.data.pages }).map((_, index) => {
-              if (
-                index === 0 ||
-                index === list.data.pages - 1 ||
-                (index >= Number(page) - 2 && index <= Number(page) + 2)
-              ) {
-                return (
-                  <PaginationItem key={index} onClick={mkHandlePage(index + 1)}>
-                    <PaginationLink isActive={index + 1 === Number(page)}>
-                      {index + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              } else if (
-                index === Number(page) - 3 ||
-                index === Number(page) + 3
-              ) {
-                return (
-                  <PaginationItem key={index}>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                );
-              }
-              return null;
-            })}
-            <PaginationItem>
-              <PaginationNext onClick={handleNext} />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
-    );
-  },
-) as <TData extends { id: string }>(
-  props: PaginatedListProps<TData>,
-) => React.ReactNode;
+  };
+  const mkHandlePage = (page: number) => () => {
+    onPageChange(page);
+  };
+  return (
+    <div className="grid gap-y-8">
+      <ul className="grid gap-y-2">
+        {list.data.results.map((item) => (
+          <li key={item.id}>{render(item)}</li>
+        ))}
+      </ul>
+      <Pagination className="w-max mx-[0]">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious onClick={handlePrevious} />
+          </PaginationItem>
+          {Array.from({ length: list.data.pages }).map((_, index) => {
+            if (
+              index === 0 ||
+              index === list.data.pages - 1 ||
+              (index >= Number(page) - 2 && index <= Number(page) + 2)
+            ) {
+              return (
+                <PaginationItem key={index} onClick={mkHandlePage(index + 1)}>
+                  <PaginationLink isActive={index + 1 === Number(page)}>
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            } else if (
+              index === Number(page) - 3 ||
+              index === Number(page) + 3
+            ) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+            return null;
+          })}
+          <PaginationItem>
+            <PaginationNext onClick={handleNext} />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  );
+};
 
 export { PaginatedList };

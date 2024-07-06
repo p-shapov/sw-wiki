@@ -8,19 +8,16 @@ import type { InferQueryHookVariables } from "@sw-wiki/shared/types";
 
 type PersonPageProps = {
   params: {
-    personId: string;
+    id: string;
   };
 };
 
 const PersonPage: React.FC<PersonPageProps> = async ({ params }) => {
   const queryClient = getQueryClient();
-  const personId = Number(params.personId);
-  if (Number.isNaN(personId)) {
-    notFound();
-  }
+  const id = params.id;
   try {
     await queryClient.prefetchQuery({
-      queryKey: usePersonQuery.getKey({ personId }),
+      queryKey: usePersonQuery.getKey({ id }),
       queryFn: async ({ queryKey: [, variables] }) =>
         usePersonQuery.fetcher(
           variables as InferQueryHookVariables<typeof usePersonQuery>,
@@ -31,7 +28,7 @@ const PersonPage: React.FC<PersonPageProps> = async ({ params }) => {
   }
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <PersonInfoPage personId={Number(params.personId)} />
+      <PersonInfoPage id={id} />
     </HydrationBoundary>
   );
 };

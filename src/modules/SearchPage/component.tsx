@@ -19,7 +19,7 @@ const SearchPage: React.FC = clientOnly(() => {
     setFilters((prev) => ({ ...prev, page: page.toString() }));
   };
   return (
-    <div className="grid container py-20 gap-y-8">
+    <div className="grid container gap-y-8">
       <PeopleSearch
         query={filters.search}
         onQueryChange={handleSearchQueryChange}
