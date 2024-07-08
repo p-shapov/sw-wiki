@@ -225,7 +225,11 @@ const InfoCard = <
                           key={child.title}
                           title={child.title}
                           // notice: casting to string due to all fields are strings
-                          value={field.value as string}
+                          value={
+                            isEditing
+                              ? (field.value as string)
+                              : data[child.children]
+                          }
                           isEditing={isEditing}
                           onValueChange={field.onChange}
                         />
@@ -254,7 +258,11 @@ const InfoCard = <
                             key={child.title}
                             title={child.title}
                             // notice: casting to string due to all fields are strings
-                            value={field.value as string}
+                            value={
+                              isEditing
+                                ? (field.value as string)
+                                : data[child.children]
+                            }
                             isEditing={isEditing}
                             onValueChange={field.onChange}
                           />
