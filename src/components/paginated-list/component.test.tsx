@@ -16,6 +16,10 @@ describe("PaginatedList", () => {
     <div>Item {item.id}</div>
   );
 
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   it("should render loading state initially", async () => {
     mockUseListQuery.mockReturnValue({
       data: undefined,

@@ -18,6 +18,15 @@ describe("SearchList", () => {
   const mockOnQueryChange = jest.fn();
   const mockSelect: RenderComponentProps["select"] = (item) => item.id;
 
+  beforeAll(() => {
+    localStorage.clear();
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+    localStorage.clear();
+  });
+
   it("should render search input", () => {
     mockUseListQuery.mockReturnValue({ data: { results: [] } });
     renderComponent({
