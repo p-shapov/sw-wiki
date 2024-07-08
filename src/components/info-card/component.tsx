@@ -164,7 +164,7 @@ const InfoCard = <
       form.reset(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isEditing]);
+  }, [isEditing]);
   const handleEdit = () => {
     setIsEditing(true);
   };
