@@ -23,6 +23,7 @@ const PeopleSearch: React.FC<SearchPeopleProps> = clientOnly(
   ({ query, onQueryChange }) => {
     return (
       <SearchList
+        id="people-search"
         query={query}
         useListQuery={useListPeopleQuery}
         select={listSelector}

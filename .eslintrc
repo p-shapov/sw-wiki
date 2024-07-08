@@ -132,10 +132,7 @@
     ],
     "import/no-self-import": "error",
     "import/no-unused-modules": [
-      "error",
-      {
-        "missingExports": true
-      }
+      "error"
     ],
     "import/no-unassigned-import": [
       "error",
@@ -179,17 +176,28 @@
     "node_modules",
     ".next",
     "generated",
-    "*.config.*",
     "public"
   ],
   "overrides": [
     {
       "files": [
+        "src/**/*.test.*"
+      ],
+      "extends": [
+        "plugin:jest-dom/recommended",
+        "plugin:testing-library/react"
+      ]
+    },
+    {
+      "files": [
         "src/app/**/*",
-        "src/**/*.stories.tsx"
+        "./*.config.*",
+        "./*.setup.*"
       ],
       "rules": {
-        "import/no-default-export": "off"
+        "import/no-unused-modules": "off",
+        "import/no-default-export": "off",
+        "import/no-unassigned-import": "off"
       }
     },
     {

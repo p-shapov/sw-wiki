@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 import type { QueryHook } from "react-query-kit";
 import { z } from "zod";
 
-import { useListPeopleQuery } from "@sw-wiki/shared/queries/useListPeopleQuery";
 import type {
   ListQueryResult,
   ListQueryVariables,
@@ -93,8 +92,9 @@ const SearchCommand = React.forwardRef(
         <CommandDialogTrigger
           placeholder="Enter a search query..."
           value={value}
+          data-testid="open-dialog"
         />
-        <CommandDialogContent shouldFilter={false}>
+        <CommandDialogContent shouldFilter={false} data-testid="dialog">
           <DialogTitle className="hidden">Search</DialogTitle>
           <DialogDescription className="hidden">Search</DialogDescription>
           <CommandInput
@@ -102,9 +102,12 @@ const SearchCommand = React.forwardRef(
             value={value}
             onValueChange={handelValueChange}
             onKeyUp={handleEnter}
+            data-testid="input"
           />
           <CommandList>
-            <CommandEmpty>No results found</CommandEmpty>
+            <CommandEmpty data-testid="no-results">
+              No results found
+            </CommandEmpty>
             {!!recentQueries.length && (
               <CommandGroup heading="Recent">
                 {recentQueries.map((query) => (
@@ -113,6 +116,7 @@ const SearchCommand = React.forwardRef(
                       type="button"
                       className="w-full"
                       onClick={mkHandleShortcut(query)}
+                      data-testid={`recent:${query}`}
                     >
                       {query}
                     </button>
@@ -133,6 +137,7 @@ const SearchCommand = React.forwardRef(
                       type="button"
                       className="w-full"
                       onClick={mkHandleShortcut(query)}
+                      data-testid={`suggestion:${query}`}
                     >
                       {query}
                     </button>
@@ -153,6 +158,7 @@ const SearchCommand = React.forwardRef(
 ) => React.ReactNode;
 
 type SearchListProps<TData extends { id: string }> = {
+  id: string;
   query: string;
   useListQuery: QueryHook<ListQueryResult<TData>, ListQueryVariables>;
   select: (item: TData) => string;
@@ -168,6 +174,7 @@ const schema = z.object({
  *
  * @template TData - The type of the search result items.
  *
+ * @param {string} id - The unique identifier for the search list component.
  * @param {string} query - The current search query.
  * @param {QueryHook<ListQueryResult<TData>, ListQueryVariables>} useListQuery - The React Query hook for fetching search results.
  * @param {(data: TData) => string} select - A function that maps an item from the search results to a string value.
@@ -181,6 +188,7 @@ const schema = z.object({
  */
 
 const SearchList = <TData extends { id: string }>({
+  id,
   query,
   onQueryChange,
   select,
@@ -193,7 +201,7 @@ const SearchList = <TData extends { id: string }>({
     resolver: zodResolver(schema),
   });
   const [recentQueries, setRecentQueries] = useLocalStorage(
-    "search-list/recent" + useListPeopleQuery.getKey()[0],
+    "search-list/recent/" + id,
     [] as string[],
   );
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -215,7 +223,7 @@ const SearchList = <TData extends { id: string }>({
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSearch)}>
+      <form onSubmit={form.handleSubmit(handleSearch)} data-testid="form">
         <FormItem>
           <FormField
             control={form.control}

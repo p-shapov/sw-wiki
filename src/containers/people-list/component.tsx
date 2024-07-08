@@ -1,4 +1,5 @@
-import { Link } from "@sw-wiki/components/link/component";
+import Link from "next/link";
+
 import { PaginatedList } from "@sw-wiki/components/paginated-list/component";
 import { appRoutes } from "@sw-wiki/core/routes";
 import { clientOnly } from "@sw-wiki/shared/hocs/clientOnly";

@@ -58,10 +58,12 @@ const PaginatedList = <TData extends { id: string }>({
     retry: false,
   });
   if (!list.data) {
-    return "Loading...";
+    return <div data-testid="loading-state">Loading...</div>;
   }
   if (list.data.results.length === 0) {
-    return emptyMessage ?? "No results found";
+    return (
+      <div data-testid="empty-state">{emptyMessage ?? "No results found"}</div>
+    );
   }
   const handlePrevious = () => {
     if (list.data.previous) {
@@ -85,6 +87,7 @@ const PaginatedList = <TData extends { id: string }>({
             className={cn({
               "opacity-20": list.isFetching,
             })}
+            data-testid={`item:${item.id}`}
           >
             {render(item)}
           </li>
@@ -96,6 +99,7 @@ const PaginatedList = <TData extends { id: string }>({
             <PaginationPrevious
               onClick={handlePrevious}
               disabled={!list.data.previous}
+              data-testid="previous"
             />
           </PaginationItem>
           {Array.from({ length: list.data.pages }).map((_, index) => {
@@ -105,7 +109,11 @@ const PaginatedList = <TData extends { id: string }>({
               (index >= Number(page) - 2 && index <= Number(page) + 2)
             ) {
               return (
-                <PaginationItem key={index} onClick={mkHandlePage(index + 1)}>
+                <PaginationItem
+                  key={index}
+                  onClick={mkHandlePage(index + 1)}
+                  data-testid={`page:${index + 1}`}
+                >
                   <PaginationLink isActive={index + 1 === Number(page)}>
                     {index + 1}
                   </PaginationLink>
@@ -124,7 +132,11 @@ const PaginatedList = <TData extends { id: string }>({
             return null;
           })}
           <PaginationItem>
-            <PaginationNext onClick={handleNext} disabled={!list.data.next} />
+            <PaginationNext
+              onClick={handleNext}
+              disabled={!list.data.next}
+              data-testid="next"
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>

@@ -38,6 +38,7 @@ type Node<
 };
 
 type InfoCardAttributeProps = {
+  name: string;
   title: string;
   value: string;
   isEditing: boolean;
@@ -47,7 +48,7 @@ type InfoCardAttributeProps = {
 const InfoCardAttribute = React.forwardRef<
   HTMLInputElement,
   InfoCardAttributeProps
->(({ title, value, isEditing, onValueChange }, ref) => {
+>(({ name, title, value, isEditing, onValueChange }, ref) => {
   return (
     <li>
       <TypographyParagraph className="flex items-baseline gap-x-4">
@@ -56,12 +57,14 @@ const InfoCardAttribute = React.forwardRef<
           <input
             ref={ref}
             type="text"
+            name={name}
             value={value}
             className="bg-popover border rounded-md px-3 py-0 text-inherit/7 font-italic focus:outline-none focus:ring-offset-2 focus:ring-ring"
             onChange={(e) => onValueChange(e.target.value)}
+            data-testid={`edit:${name}`}
           />
         ) : (
-          <span>{value || "n/a"}</span>
+          <span data-testid={`data:{name}`}>{value || "n/a"}</span>
         )}
       </TypographyParagraph>
     </li>
@@ -69,6 +72,7 @@ const InfoCardAttribute = React.forwardRef<
 });
 
 type InfoCardInfoParagraphProps = {
+  name: string;
   title: string;
   value: string;
   isEditing: boolean;
@@ -78,7 +82,7 @@ type InfoCardInfoParagraphProps = {
 const InfoCardInfoParagraph = React.forwardRef<
   HTMLTextAreaElement,
   InfoCardInfoParagraphProps
->(({ title, value, isEditing, onValueChange }, ref) => {
+>(({ name, title, value, isEditing, onValueChange }, ref) => {
   return (
     <div>
       <TypographyH3>{title}</TypographyH3>
@@ -86,12 +90,14 @@ const InfoCardInfoParagraph = React.forwardRef<
         {isEditing ? (
           <textarea
             ref={ref}
+            name={name}
             value={value}
             className="bg-popover px-3 py-2 text-inherit/7 w-full border rounded-md h-[18.25rem] min-h-max font-italic focus:outline-none focus:ring-offset-2 focus:ring-ring"
             onChange={(e) => onValueChange(e.target.value)}
+            data-testid={`edit:${name}`}
           />
         ) : (
-          <span>{value || "n/a"}</span>
+          <span data-testid={`data:${name}`}>{value || "n/a"}</span>
         )}
       </TypographyParagraph>
     </div>
@@ -138,20 +144,21 @@ const InfoCard = <
     resolver: zodResolver(schema),
   });
   const [isEditing, setIsEditing] = React.useState(false);
-  const [persistedJson, setPersistedJson] = useLocalStorage<string | null>(
+  const [persistedJson, setPersistedJson] = useLocalStorage<TData | null>(
     name +
+      "/" +
       id.toString() +
       `/v${process.env.NEXT_PUBLIC_INFO_CARD_STORAGE_VERSION}`,
     null,
   );
-  const persisted = persistedJson
-    ? schema.safeParse(JSON.parse(persistedJson))
-    : null;
+  const persisted: TData | null = React.useMemo(() => {
+    return persistedJson ? schema.safeParse(persistedJson).data ?? null : null;
+  }, [schema, persistedJson]);
   const info = useInfoQuery({
     variables: { id },
-    enabled: !persisted?.data,
+    enabled: !persisted,
   });
-  const data = persisted?.data ?? info.data;
+  const data = persisted ?? info.data;
   React.useEffect(() => {
     if (data && !isEditing) {
       form.reset(data);
@@ -167,31 +174,40 @@ const InfoCard = <
   };
   const handleSave = form.handleSubmit((values) => {
     // notice: persisting both persisted and form data because card not always contain all fields
-    setPersistedJson(JSON.stringify({ ...data, ...values }));
+    setPersistedJson({ ...data, ...values });
     setIsEditing(false);
   });
   if (!data) {
-    return <div>Loading...</div>;
+    return <div data-testid="loading-state">Loading...</div>;
   }
   return (
     <Form {...form}>
-      <div className="grid gap-y-10">
+      <form className="grid gap-y-10" onSubmit={handleSave} data-testid="form">
         <div className="flex items-center justify-between gap-x-8">
           <TypographyH1>{data.name}</TypographyH1>
           <div className="flex gap-x-4">
             {isEditing ? (
-              <>
-                <Button onClick={handleSave}>Save</Button>
-                <Button onClick={handleCancel} variant="ghost">
+              <div className="contents">
+                <Button type="submit" data-testid="save">
+                  Save
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleCancel}
+                  variant="ghost"
+                  data-testid="cancel"
+                >
                   Cancel
                 </Button>
-              </>
+              </div>
             ) : (
-              <Button onClick={handleEdit}>Edit</Button>
+              <Button type="button" onClick={handleEdit} data-testid="edit">
+                Edit
+              </Button>
             )}
           </div>
         </div>
-        <form className="flex gap-x-10 w-full" onSubmit={handleSave}>
+        <div className="flex gap-x-10 w-full" onSubmit={handleSave}>
           <div className="flex-3 grid gap-y-10 h-max">
             {infoNodes.map((node) => (
               <div key={node.title} className="grid gap-y-8">
@@ -205,6 +221,7 @@ const InfoCard = <
                       render={({ field }) => (
                         <InfoCardInfoParagraph
                           ref={field.ref}
+                          name={child.children}
                           key={child.title}
                           title={child.title}
                           // notice: casting to string due to all fields are strings
@@ -233,6 +250,7 @@ const InfoCard = <
                         render={({ field }) => (
                           <InfoCardAttribute
                             ref={field.ref}
+                            name={child.children}
                             key={child.title}
                             title={child.title}
                             // notice: casting to string due to all fields are strings
@@ -248,8 +266,8 @@ const InfoCard = <
               </div>
             ))}
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </Form>
   );
 };

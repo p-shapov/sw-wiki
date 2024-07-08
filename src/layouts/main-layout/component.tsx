@@ -1,8 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import swLogo from "@public/images/sw-logo.svg";
 
-import { Link } from "@sw-wiki/components/link/component";
 import { appRoutes } from "@sw-wiki/core/routes";
 
 const MainLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
